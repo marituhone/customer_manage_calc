@@ -39,11 +39,13 @@ class Order(models.Model):
         ('out for deliver' , 'out for deliver'),
         ('Delivered' , 'Delivered'),
     )
-
-    date_created = models.DateTimeField(auto_now_add =True ,null =True)
-    status = models.CharField(max_length=255,null =True ,choices = STATUS)
     customer = models.ForeignKey(Customer , null =True, on_delete = models.SET_NULL)
     product = models.ForeignKey(Product , null =True, on_delete = models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add =True ,null =True)
+    status = models.CharField(max_length=255,null =True ,choices = STATUS)
+    note = models.CharField(max_length=255,null =True )
+    
+    
    
 
 

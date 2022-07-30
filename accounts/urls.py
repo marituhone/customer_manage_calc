@@ -11,6 +11,7 @@ urlpatterns = [
     path('customer/<str:pk>', CustomerView, name ="customer"),
     path('update/<str:pk>', UpdateView, name ="update"),
     path('delete/<str:pk>', DeleteView, name ="delete"),
-    path('user',UserPage, name="user")
+    path('user',UserPage, name="user"),
+    path('account',AccountView , name='account')
     
 ]

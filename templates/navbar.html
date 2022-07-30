@@ -20,6 +20,11 @@
         <a class="nav-link" href="{%url 'product' %}">Products</a>
       </li>
     </ul>
+    {% else %}
+    
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'account' %}">Settings</a>
+      </li>
     {%endif%}
    
   </div>

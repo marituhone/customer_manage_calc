@@ -1,15 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Customer(models.Model):
-    user = models.OneToOneField(User,null=True, on_delete=models.CASCADE)
+class Customer(models.Model):   
+    # creating user profile
+    user = models.OneToOneField(User,null=True,blank=True, on_delete=models.CASCADE)
     name =  models.CharField(max_length=255 ,null =True)
     phone =  models.CharField(max_length=255,null =True)
     email =  models.CharField(max_length=255,null =True)
+    image = models.ImageField(default='default.png',upload_to = 'profile.pics')
     date_created = models.DateTimeField(auto_now_add =True ,null =True)
 
     def __str__ (self):
-        return self.name
+        return self.user.username
 class Tag(models.Model):
     name = models.CharField(max_length=255 ,null =True)
 
@@ -48,7 +50,8 @@ class Order(models.Model):
     note = models.CharField(max_length=255,null =True )
     
     
-   
+# class profile(models.Model):
+
 
 
 

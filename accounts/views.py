@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate , login,logout
-from .forms import CreateOrderForm ,CreateUserForm
+from .forms import CreateOrderForm ,CreateUserForm,CustomerForm
 from django.contrib import messages
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
@@ -12,6 +12,7 @@ from .decorators import unauthenticated_user,allowed_users,admin_only
 from django.contrib.auth.decorators import login_required
 @login_required(login_url="login")
 @admin_only
+# @allowed_users(allowed_roles=['admin'])
 def HomeView(request):
         orders = Order.objects.all()
         customers =Customer.objects.all()
@@ -27,8 +28,11 @@ def HomeView(request):
 @allowed_users(allowed_roles=['customer'])
 def UserPage(request):
         orders = request.user.customer.order_set.all()
-        print("orders",orders)
-        context ={'orders': orders}
+        total_orders = orders.count()
+        deliverd = orders.filter(status ="Delivered").count()
+        pending = orders.filter(status = "pending").count()
+     
+        context ={'orders': orders,'total_orders':total_orders,'deliverd':deliverd,'pending':pending}
         return render(request,'user.html',context)
 def ProductView(request):
         products = Product.objects.all()
@@ -90,9 +94,6 @@ def RegisterView(request):
                                 user = form.save()
                                 username = form.cleaned_data.get('username')
                                 messages.success(request, 'account was sucessfully created for ' + username)
-                                group = Group.objects.get(name ='customer')
-                                user.groups.add(group)
-
                         
                         
                                 return redirect("login")
@@ -118,6 +119,18 @@ def LoginView(request):
 def LogOutView(request):
         logout(request)
         return redirect("login")
+@login_required(login_url="login")
+@allowed_users(allowed_roles=['customer'])
+def AccountView(request):
+        customer= request.user.customer
+        form =CustomerForm(instance=customer)
+        if request.method=="POST":
+           form =CustomerForm(request.POST,request.FILES,instance=customer)
+           if form.is_valid():
+                form.save()
+
+        context ={'form':form}
+        return render(request , 'account_setting.html',context)
 
 
        

@@ -2,8 +2,7 @@
 {% block content %}
 <form method="POST" action=""> 
     {% csrf_token %}
-    {{ formset.management_form }}
-    {% for form in formset %}
+    {% for form in form %}
         
         {{form}}
         <hr>

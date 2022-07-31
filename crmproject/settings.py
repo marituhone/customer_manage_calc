@@ -21,7 +21,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
-    'src',
     'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
+
 from django.contrib.auth import authenticate , login,logout
 from .forms import CreateOrderForm ,CreateUserForm,CustomerForm
 from django.contrib import messages
@@ -47,20 +47,13 @@ def CustomerView(request , pk):
        return render(request , "customer.html",context)
 def CreateView(request,pk):
         # print("pronting now",request.POST) checking if the data is sented from the form
-
-       OrderFormSet = inlineformset_factory(Customer,Order,fields =('product','status'),extra=4)
-       customer = Customer.objects.get(id=pk)
-       formset = OrderFormSet(queryset= Order.objects.none(),instance = customer)
+       form = CreateOrderForm()
        if request.method == "POST":
-                formset = OrderFormSet(request.POST , instance = customer)
-        # form = CreateOrderForm(request.POST)
-                if formset.is_valid():
-                        formset.save()
-                        return redirect("/")
-
-       
-        
-       context ={'formset':formset}
+          form = CreateOrderForm(request.POST)
+          if form.is_valid():
+                form.save()
+                return redirect("/")
+       context ={'form':form}
        return render(request ,"order_form.html",context)
 
 def UpdateView(request,pk):
